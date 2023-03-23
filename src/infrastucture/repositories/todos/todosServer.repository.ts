@@ -3,7 +3,7 @@ import { Todo } from '@/domain/models';
 import { ErrorWidthCode } from '@/domain/models/Error/Error.model';
 import { ITodo } from '@/infrastucture/database/schemas';
 import { MongoDocument } from '@/infrastucture/database/common/mongoDocument.interface';
-import { TodosServerRepository } from '@/domain/services/todos/todosServerRepository.interface';
+import { TodosRepository } from '@/domain/services';
 
 type TodoDocument = MongoDocument<ITodo>
 
@@ -13,7 +13,7 @@ const mapToDomain = (todo: TodoDocument): Todo => ({
   id: todo._id
 })
 
-export const todosServerRepository = (todoModel: Model<ITodo>): TodosServerRepository => ({
+export const todosServerRepository = (todoModel: Model<ITodo>): TodosRepository => ({
   getTodos: async () => await (await todoModel.find()).map(todo => mapToDomain(todo)),
 
   getTodoByID: async (id: string) => {

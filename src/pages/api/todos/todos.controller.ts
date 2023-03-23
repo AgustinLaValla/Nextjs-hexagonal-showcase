@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ErrorWidthCode } from "@/domain/models/Error/Error.model";
-import { todosServerService } from "../../../domain/services/todos/todosServer.service";
-import { todosServerRepository } from "../../../infrastucture/repositories/todosServer.repository";
+import { ErrorWidthCode } from "@/domain/models";
+import { todosServerRepository } from "../../../infrastucture/repositories/todos/todosServer.repository";
 import { Todo } from "@/infrastucture/database/schemas";
 import { throw500Error } from "@/infrastucture/utils";
+import { todosService as todosServerService } from "@/domain/services";
 
 const todosService = todosServerService(todosServerRepository(Todo));
 
