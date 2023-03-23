@@ -1,4 +1,4 @@
-import { Model, Document, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Todo } from '@/domain/models';
 import { ErrorWidthCode } from '@/domain/models/Error/Error.model';
 import { ITodo } from '@/infrastucture/database/schemas';
