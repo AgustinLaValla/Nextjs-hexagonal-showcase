@@ -1,4 +1,4 @@
-import { Schema, model, Document, ObjectId } from 'mongoose';
+import { Schema, model, Document, models, Model } from 'mongoose';
 
 export interface ITodo extends Document {
   description: string;
@@ -12,4 +12,4 @@ const todoSchema = new Schema<ITodo>({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 })
 
-export const Todo = model<ITodo>('Todo', todoSchema);
+export const Todo = (models.Todo || model<ITodo>('Todo', todoSchema)) as Model<ITodo>;

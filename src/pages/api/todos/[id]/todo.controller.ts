@@ -20,6 +20,18 @@ export const getTodoByID = async (req: NextApiRequest, res: NextApiResponse) => 
   }
 }
 
+export const updateTodo = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const todo = await todosService.updateTodo(req.body);
+    return res.status(200).json(todo);
+  } catch (error) {
+    if (error instanceof ErrorWidthCode) {
+      return res.status(error.code).json(error.message);
+    }
+    return throw500Error(res);
+  }
+}
+
 export const deleteTodo = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const id = req.query?.id as string;
@@ -31,5 +43,4 @@ export const deleteTodo = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     return throw500Error(res);
   }
-
 }

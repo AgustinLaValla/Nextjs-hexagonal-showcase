@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { deleteTodo, getTodoByID } from "./todo.controller";
+import { getTodoByID, updateTodo, deleteTodo } from "./todo.controller";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const responses = {
     'GET': () => getTodoByID(req, res),
+    'PUT': () => updateTodo(req, res),
     'DELETE': () => deleteTodo(req, res),
   }
 

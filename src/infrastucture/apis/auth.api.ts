@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const usersApi = axios.create({
-  baseURL: '/api/users',
+export const authApi = axios.create({
+  baseURL: '/api/auth',
   headers: { 'Content-Type': 'application/json' }
 })

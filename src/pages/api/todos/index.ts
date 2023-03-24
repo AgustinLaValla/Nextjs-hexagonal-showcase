@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getTodos, createTodo, updateTodo } from './todos.controller';
+import { getTodos, createTodo } from './todos.controller';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const responses = {
     'GET': () => getTodos(req, res),
     'POST': () => createTodo(req, res),
-    'PUT': () => updateTodo(req, res),
   }
 
   const response = responses[req.method as keyof typeof responses];
