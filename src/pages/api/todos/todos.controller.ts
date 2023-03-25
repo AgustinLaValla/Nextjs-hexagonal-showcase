@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorWidthCode } from "@/domain/models";
-import { todosServerRepository } from "../../../infrastucture/repositories/todos/todosServer.repository";
+import { todosServerRepository } from "../../../infrastucture/repositories";
 import { Todo } from "@/infrastucture/database/schemas";
 import { throw500Error } from "@/infrastucture/utils";
 import { todosService as todosServerService } from "@/domain/services";
@@ -12,6 +12,7 @@ export const getTodos = async (req: NextApiRequest, res: NextApiResponse) => {
     const todos = await todosService.getTodos();
     return res.status(200).json(todos);
   } catch (error) {
+    console.log(error)
     if (error instanceof ErrorWidthCode) {
       return res.status(error.code).json(error.message);
     }

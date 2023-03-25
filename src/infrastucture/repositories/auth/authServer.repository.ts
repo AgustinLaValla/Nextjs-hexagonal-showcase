@@ -14,13 +14,16 @@ type UserDocument = MongoDocument<IUser>;
 const mapToDomain = (user: UserDocument): User => ({
   name: user.name,
   email: user.email,
-  password: user.password,
+  // password: user.password,
   id: user._id
 })
 
 export const authServerRepository = (userModel: Model<IUser>): AuthRepository => ({
 
   register: async ({ name, email, password }: Omit<User, 'id'>) => {
+
+    if (!name || !email || !password)
+      throw new ErrorWidthCode('All fields are required', 400);
 
     await db.connect();
 
@@ -41,7 +44,7 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
     await newUser.save();
 
     const domainUser = mapToDomain(newUser);
-    const token = jwt.sign(domainUser, config.jwtSecret, 60 * 60);
+    const token = await jwt.sign(domainUser, config.jwtSecret, 60 * 60);
 
     await db.disconnect();
 
@@ -52,6 +55,9 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
 
   },
   login: async ({ email, password }: Omit<User, 'id' | 'name'>) => {
+
+    if (!email || !password)
+      throw new ErrorWidthCode('All fields are required', 400);
 
     await db.connect();
 
@@ -67,9 +73,8 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
       throw new ErrorWidthCode('Invalid credentials', 400);
     }
 
-
     const domainUser = mapToDomain(user);
-    const token = jwt.sign(domainUser, config.jwtSecret, 60 * 60);
+    const token = await jwt.sign(domainUser, config.jwtSecret, 60 * 60);
 
     await db.disconnect();
 

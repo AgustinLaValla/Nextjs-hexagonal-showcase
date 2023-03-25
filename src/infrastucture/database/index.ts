@@ -11,11 +11,13 @@ export const db = {
 
     const { isConnected } = db_connections;
 
-    if (isConnected) return console.log(`${blue('Database is already connected')}`)
+    if (isConnected === 1)
+      return console.log(`${blue('Database is already connected')}`)
 
     if (!!connections.length) {
       db_connections.isConnected = connections[0].readyState;
-      if (db_connections.isConnected === 1) return console.log(`${blue('Using previous connection')}`);
+      if (db_connections.isConnected === 1)
+        return console.log(`${blue('Using previous connection')}`);
 
       await disconnect();
     }
@@ -25,5 +27,8 @@ export const db = {
     console.log(`${green('Server on port: ')} ${yellow(String(config.httpPort))}`)
   },
 
-  disconnect: async () => await disconnect()
+  disconnect: async () => {
+    await disconnect();
+    db_connections.isConnected = 0;
+  }
 }

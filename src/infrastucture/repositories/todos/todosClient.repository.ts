@@ -3,7 +3,7 @@ import { Todo } from "@/domain/models/Todo/Todo.model";
 import { http } from "../../adapters";
 import { todosApi } from "../../apis";
 
-export const todosRepository: TodosRepository = {
+export const todosClientRepository: TodosRepository = {
   getTodos: async () => await http.get<Todo[]>(todosApi, ''),
   getTodoByID: async (id: string) => await http.get<Todo>(todosApi, `/${id}`),
   createTodo: async (todo: Omit<Todo, 'id'>) => await http.post<Todo>(todosApi, '', todo),
