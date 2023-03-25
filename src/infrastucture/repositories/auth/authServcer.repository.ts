@@ -6,6 +6,7 @@ import { IUser } from "@/infrastucture/database/schemas";
 import { db } from "@/infrastucture/database";
 import { jwt, crypto } from "@/infrastucture/adapters";
 import { config } from "@/config";
+import { isValidEmail } from "@/infrastucture/utils";
 
 
 type UserDocument = MongoDocument<IUser>;
@@ -23,11 +24,16 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
 
     await db.connect();
 
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email: email.toLowerCase() });
     if (user) {
       await db.disconnect();
       throw new ErrorWidthCode('User Already Exists', 409);
     };
+
+    if (!isValidEmail(email)) {
+      await db.disconnect();
+      throw new ErrorWidthCode('Invalid email', 400);
+    }
 
     const hashedPassword = crypto.hash(password, 10);
 
@@ -49,7 +55,7 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
 
     await db.connect();
 
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email: email.toLowerCase() });
     if (!user) {
       await db.disconnect();
       throw new ErrorWidthCode('Not found', 404);
