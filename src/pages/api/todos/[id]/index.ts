@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getTodoByID, updateTodo, deleteTodo } from "./todo.controller";
+import { deleteTodo, getTodoByID, updateTodo } from "@/infrastucture/adapters/controllers";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { register } from "../auth.controller";
+import { register } from "@/infrastucture/adapters/controllers";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST')
