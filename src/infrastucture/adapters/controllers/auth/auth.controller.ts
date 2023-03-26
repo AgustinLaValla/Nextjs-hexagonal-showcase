@@ -29,4 +29,19 @@ export const login = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     return throw500Error(res);
   }
+  
+}
+
+export const checkToken = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const token = req.cookies.token || req.headers.authorization;
+    const session = await service.checkToken(token);
+    return res.status(200).json(session);
+
+  } catch (error) {
+    if (error instanceof ErrorWidthCode) {
+      return res.status(error.code).json(error.message);
+    }
+    return throw500Error(res);
+  }
 }

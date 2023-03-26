@@ -5,11 +5,13 @@ import { authApi } from "@/infrastucture/apis";
 
 export const authClientRepository: AuthRepository = ({
 
-  register: async (credentials: Omit<User, 'id'>) =>
-    await http.post<Session>(authApi, '/auth/register', credentials),
+  register: (credentials: Omit<User, 'id'>) =>
+    http.post<Session>(authApi, '/register', credentials),
 
-  login: async (credentials: Omit<User, 'id' | 'name'>) =>
-    await http.post<Session>(authApi, '/auth/login', credentials),
+  login: (credentials: Omit<User, 'id' | 'name'>) =>
+    http.post<Session>(authApi, '/login', credentials),
 
-  logout: async () => { }
+  logout: async () => { },
+
+  checkToken: () => http.get<Session>(authApi, '/validate-token')
 })

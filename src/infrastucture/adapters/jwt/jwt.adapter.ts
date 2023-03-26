@@ -1,5 +1,7 @@
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
 
+type PayloadResponse<T> = JWTPayload & T;
+
 const sign = async (payload: any, secret: string, expiration: number): Promise<string> => {
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + expiration;
@@ -12,8 +14,8 @@ const sign = async (payload: any, secret: string, expiration: number): Promise<s
     .sign(new TextEncoder().encode(secret));
 }
 
-const verify = async (token: string, secret: string): Promise<JWTPayload> => {
+const verify = async <T>(token: string, secret: string): Promise<PayloadResponse<T>> => {
   const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
-  return payload;
+  return payload as PayloadResponse<T>;
 }
 export const jwt = { sign, verify };

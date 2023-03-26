@@ -4,4 +4,5 @@ export interface AuthRepository {
   register: (credentials: Omit<User, 'id'>) => Promise<Session>;
   login: (credentials: Omit<User, 'id' | 'name'>) => Promise<Session>;
   logout: () => Promise<void>;
+  checkToken: (token?: string) => Promise<Session>;
 };

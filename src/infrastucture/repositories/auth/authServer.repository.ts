@@ -49,7 +49,7 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
     await db.disconnect();
 
     return {
-      ...domainUser,
+      user: domainUser,
       token
     }
 
@@ -79,9 +79,40 @@ export const authServerRepository = (userModel: Model<IUser>): AuthRepository =>
     await db.disconnect();
 
     return {
-      ...domainUser,
+      user: domainUser,
       token
     }
   },
-  logout: async () => { }
+
+  logout: async () => { },
+
+  checkToken: async (token?: string) => {
+    try {
+      const payload = await jwt.verify<User>(token || '', config.jwtSecret);
+
+      const userPayload = {
+        email: payload.email,
+        id: payload.id,
+        name: payload.name,
+      }
+
+      const newToken = await jwt.sign(userPayload, config.jwtSecret, 60 * 60);
+
+      return {
+        user: userPayload,
+        token: newToken,
+      }
+
+    } catch (error) {
+
+      const messages = {
+        'ERR_JWT_EXPIRED': 'Token has expired. Please, login againg',
+        'ERR_JWS_SIGNATURE_VERIFICATION_FAILED': 'Invalid token',
+      }
+
+      const noTokenProvidedMsg = 'No token provided';
+
+      throw new ErrorWidthCode(messages[(error as any).code as keyof typeof messages] || noTokenProvidedMsg, 401);
+    }
+  }
 })

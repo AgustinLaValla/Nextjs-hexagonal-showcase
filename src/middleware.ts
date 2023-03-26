@@ -32,7 +32,9 @@ export default async function middleware(req: NextRequest) {
 
   try {
     const payload = await jwt.verify(token, appConfig.jwtSecret);
+    console.log(payload);
   } catch (error) {
+    console.log(error);
     return (error as any).code === 'ERR_JWT_EXPIRED'
       ? NextResponse.rewrite(cloneURL(req, paths.tokenError, messages.expiredToken))
       : NextResponse.rewrite(cloneURL(req, paths.tokenError, messages.invalidToken))
