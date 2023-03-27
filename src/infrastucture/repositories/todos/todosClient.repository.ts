@@ -4,9 +4,9 @@ import { http } from "../../adapters";
 import { todosApi } from "../../apis";
 
 export const todosClientRepository: TodosRepository = {
-  getTodos: async () => await http.get<Todo[]>(todosApi, ''),
-  getTodoByID: async (id: string) => await http.get<Todo>(todosApi, `/${id}`),
-  createTodo: async (todo: Omit<Todo, 'id'>) => await http.post<Todo>(todosApi, '', todo),
-  updateTodo: async (todo: Todo) => await http.put<Todo>(todosApi, `/${todo.id}`, todo),
-  deleteTodo: async (id: string) => await http.delete<Todo>(todosApi, `/${id}`)
+  getTodos: () => http.get<Todo[]>(todosApi, ''),
+  getTodoByID: (id: string) => http.get<Todo>(todosApi, `/${id}`),
+  createTodo: (todo: Omit<Todo, 'id'>) => http.post<Todo>(todosApi, '', todo),
+  updateTodo: (todo: Todo) => http.put<Todo>(todosApi, `/${todo.id}`, todo),
+  deleteTodo: (id: string) => http.delete<Todo>(todosApi, `/${id}`)
 } 

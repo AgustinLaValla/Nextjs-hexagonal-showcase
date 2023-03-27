@@ -24,20 +24,18 @@ const cloneURL = (req: NextRequest, newPath: string, message?: string) => {
 
 export default async function middleware(req: NextRequest) {
 
-  const token = req.headers.get('authorization');
+  const token = req.cookies.get('token')?.value || req.headers.get('authorization');
 
   if (!token) {
-    return NextResponse.rewrite(cloneURL(req, paths.tokenError, messages.tokenRequired));
+    return NextResponse.redirect(`/auth/login`);
   }
 
   try {
-    const payload = await jwt.verify(token, appConfig.jwtSecret);
-    console.log(payload);
+    await jwt.verify(token, appConfig.jwtSecret);
   } catch (error) {
-    console.log(error);
     return (error as any).code === 'ERR_JWT_EXPIRED'
-      ? NextResponse.rewrite(cloneURL(req, paths.tokenError, messages.expiredToken))
-      : NextResponse.rewrite(cloneURL(req, paths.tokenError, messages.invalidToken))
+      ? NextResponse.redirect(`/auth/login`)
+      : NextResponse.redirect(`/auth/login`)
   }
 
   return NextResponse.next();
