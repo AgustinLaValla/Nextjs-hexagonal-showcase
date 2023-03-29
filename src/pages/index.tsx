@@ -1,6 +1,44 @@
+import React from 'react'
 import Head from 'next/head'
+import { Todo, User } from '@/domain/models'
+import { todosService } from '@/domain/services'
+import { todosClientRepository } from '@/infrastucture/repositories'
+import { CreateTodo, Layout, TodoList } from '@/presentation/components'
+import { Box } from '@mui/material'
+import { useAuthContext } from '@/presentation/providers'
 
-export default function Home() {
+
+const clientService = todosService(todosClientRepository);
+
+export const Home = () => {
+
+  const { user } = useAuthContext();
+  const [todoList, setTodoList] = React.useState<Todo[]>([]);
+
+  const toggleComplete = async (todo: Todo) =>
+    clientService.updateTodo({ ...todo, isCompleted: !todo.isCompleted })
+      .then((updatedTodo) =>
+        setTodoList(todoList.map((item) => item.id === updatedTodo.id ? updatedTodo : item))
+      )
+      .catch(console.log)
+
+  const getTodos = () =>
+    clientService.getTodos().then((todos) => setTodoList(todos))
+
+  const addTodo = (description: string) =>
+    clientService.createTodo({ description, isCompleted: false, userId: (user as User).id })
+      .then(todo => setTodoList([...todoList, todo]))
+      .catch(console.log);
+
+  const removeTodo = (id: string) =>
+    clientService.deleteTodo(id)
+      .then(() => setTodoList(todoList.filter(({ id: todoId }) => todoId !== id)))
+      .catch(console.log)
+
+  React.useEffect(() => {
+    getTodos();
+  }, [])
+
   return (
     <>
       <Head>
@@ -9,6 +47,19 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Layout authButtonLabel='Log out'>
+        <Box sx={{ marginTop: '2rem', padding: '1rem 2rem' }} >
+          <CreateTodo addTodo={addTodo} />
+          <TodoList
+            todos={todoList}
+            toggleComplete={toggleComplete}
+            removeTodo={removeTodo}
+          />
+        </Box>
+      </Layout>
     </>
   )
 }
+
+export default Home;

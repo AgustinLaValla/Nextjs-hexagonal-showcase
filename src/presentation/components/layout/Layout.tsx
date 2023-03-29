@@ -13,11 +13,18 @@ export const Layout: React.FC<Props> = ({
   authButtonLabel = 'Log in'
 }) => {
 
-  const { isLoggedIn } = useAuthContext();
+  const navRef = React.useRef() as React.MutableRefObject<HTMLDivElement>;
+  const { isLoggedIn, logout } = useAuthContext();
+
+  const onClick = () => {
+    if (isLoggedIn) {
+      logout();
+    }
+  }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky">
+    <Box height="100vh">
+      <AppBar position='sticky' ref={navRef}>
         <Toolbar >
           <IconButton
             size="large"
@@ -32,13 +39,13 @@ export const Layout: React.FC<Props> = ({
             Task manager
           </Typography>
 
-          <Button color="inherit">
+          <Button color="inherit" onClick={onClick}>
             {isLoggedIn ? 'Log out' : authButtonLabel}
           </Button>
         </Toolbar>
       </AppBar>
 
-      <main>
+      <main style={{ height: `calc(100vh - ${navRef.current?.clientHeight || 0})` }}>
         {children}
       </main>
     </Box>

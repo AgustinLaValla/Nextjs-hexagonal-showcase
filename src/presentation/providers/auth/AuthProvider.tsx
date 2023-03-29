@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 interface AuthContextState {
   isLoggedIn: boolean;
   user?: User | null;
-  firstValidationDone: boolean,
   setState: React.Dispatch<React.SetStateAction<State>>;
   register: (credentials: Omit<User, 'id'>) => Promise<void>;
   login: (credentials: Omit<User, 'id' | 'name'>) => Promise<void>;
@@ -18,7 +17,6 @@ interface AuthContextState {
 interface State {
   user?: User | null;
   isLoggedIn: boolean;
-  firstValidationDone: boolean,
 }
 
 interface Props {
@@ -28,7 +26,7 @@ interface Props {
 export const AuthContext = React.createContext<AuthContextState>({} as AuthContextState);
 
 
-const intialState: State = { user: null, isLoggedIn: false, firstValidationDone: true };
+const intialState: State = { user: null, isLoggedIn: false };
 const service = authService(authClientRepository);
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
@@ -65,7 +63,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
       .catch(error => logout());
 
   React.useEffect(() => {
-    checkToken().then(() => setState({ ...state, firstValidationDone: false }));
+    checkToken();
   }, [])
 
   return (

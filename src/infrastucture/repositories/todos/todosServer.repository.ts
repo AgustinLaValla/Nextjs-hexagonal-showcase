@@ -16,10 +16,10 @@ const mapToDomain = (todo: TodoDocument): Todo => ({
 })
 
 export const todosServerRepository = (todoModel: Model<ITodo>): TodosRepository => ({
-  getTodos: async () => {
+  getTodos: async (userId?: string) => {
 
     await db.connect();
-    const todos = await todoModel.find();
+    const todos = await todoModel.find({ userId }).lean();
 
     await db.disconnect();
 

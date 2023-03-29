@@ -3,7 +3,7 @@ import { Todo } from "@/domain/models";
 type TodoID = string;
 
 export interface TodosRepository {
-  getTodos: () => Promise<Todo[]>;
+  getTodos: (userId?: string) => Promise<Todo[]>;
   getTodoByID: (id: TodoID) => Promise<Todo>;
   createTodo: (todo: Omit<Todo, 'id'>) => Promise<Todo>;
   updateTodo: (todo: Todo) => Promise<Todo>;
