@@ -23,11 +23,11 @@ interface Props {
   children: JSX.Element | JSX.Element[]
 }
 
+const service = authService(authClientRepository);
+
 export const AuthContext = React.createContext<AuthContextState>({} as AuthContextState);
 
-
 const intialState: State = { user: null, isLoggedIn: false };
-const service = authService(authClientRepository);
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
 

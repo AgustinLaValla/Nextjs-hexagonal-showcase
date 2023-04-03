@@ -30,8 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   await db.connect();
 
-  console.log(UserModel);
-
   let testUser: MongoDocument<IUser> =
     await UserModel.findOne({ email: seedData.users[0].email }) ||
     new UserModel(seedData.users[0]);
@@ -47,8 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await newTodo.save();
   });
 
-  return res.status(201).json('Success');
-
   await db.disconnect();
+  return res.status(201).json('Success');
 
 }
