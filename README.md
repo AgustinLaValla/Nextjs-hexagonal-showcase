@@ -6,7 +6,7 @@ A full-stack project for showing how to implement Hexagonal Architecture in Next
 Providing a boilerplate to start your own full-stack Next.js project that implements Hexagonal Architecture.
 
 ## Todo
-  - Unit tests for Domain Layer
+  <!-- - Unit tests for Domain Layer -->
   - Integration tests for Controllers
   - End to End tests for UI
 
